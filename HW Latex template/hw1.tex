@@ -1,0 +1,308 @@
+\documentclass[12pt,letterpaper]{article}
+
+\input{CS260.tex}%for different course, change the commented lines in this file
+\usepackage{graphicx,amssymb,amsmath,bm}
+\usepackage{newcommand}
+\usepackage{mathtools}
+\usepackage{dsfont}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\sloppy
+\newcommand{\ignore}[1]{}
+\usepackage{hyperref}
+
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\topmargin -0.5in
+\textheight 9.0in
+
+\begin{document}
+
+\homework{Fall 2018}{$1$}{}{}
+\begin{footnotesize}
+	\begin{itemize}
+		\item Feel free to talk to other students in the class when doing the homework. You should, however, write down your solution yourself. You also must indicate on each homework with whom you collaborated and cite any other sources you use including
+		Internet sites.
+		\item You will write your solution in LaTeX and submit the pdf file through Gradescope. You also need to submit the zipped LaTeX files to CCLE.
+		We will grade your homework based on the final  version of the pdf file submitted to Gradescope. We will not grade the zipped Latex files on CCLE. However, failure to submitting your LaTax files to CCLE will incur 2 points penalty out of 100 points.	
+				\item The homework (both pdf and zipped Latex source files) is due at 3:59 PM before the class.
+	\end{itemize}
+\end{footnotesize}
+
+
+\begin{enumerate}
+	
+
+\item[1.] (2.2)\\
+Since the distribution $\mathcal{D}$ over the domain $\mathcal{X}$ and the target hypothesis $f$ are unknown, the error over the training samples is 
+\begin{equation*}
+L_S(h) = \frac{|i\in [m] : h(x_i) \not= f(x_i)|}{m},
+where \hspace{4pt} [m] = \{1, . . . , m\}.
+= \frac{1}{m}\sum_{i=1}^m {\mathds{1}[h(x_i) \not= f(x_i)]}
+\end{equation*}
+
+So, the expected value of the training error 
+\begin{equation*}
+\mathbb{E}_{S|x \sim \mathcal{D}^m}[L_S(h)]
+= \frac{1}{m} \mathbb{E}_{S|x \sim \mathcal{D}^m}\left [\sum_{i=1}^m {\mathds{1}[h(x_i) \not= f(x_i)]}\right ]
+= \frac{1}{m}\sum_{i=1}^m  \mathbb{E}_{S|x \sim \mathcal{D}^m}\left [{\mathds{1}[h(x_i) \not= f(x_i)]}\right ]
+\end{equation*}
+
+If we choose a random example $x$ such that $h(x)\not= f(x)$, then the expected training error can be measured by probability distribution of $\mathcal{D}$ and $f$. i.e.,
+
+\begin{equation*}
+    = \frac{1}{m}\sum_{i=1}^m 1.\mathbb{P}_{x\sim \mathcal{D}^m}(h(x) \not= f(x_i))
+    =\frac{1}{m}\sum_{i=1}^mL_{(\mathcal{D}, f)}(h)
+    = L_{(\mathcal{D}, f)}(h)
+\end{equation*}
+
+Hence, $\mathbb{E}_{S|x\sim\mathcal{D}^m}\left[L_S(h)\right] = L_{(\mathcal{D}, f)}(h)$
+
+
+\newpage
+
+
+
+\item[2.] (2.3)\\
+1) Based on the empirical risk minimization principle, the algorithm A can be an ERM if the emprical risk is minimized with the chosen hypothesis. The empirical risk be:\\
+\begin{*equation}
+$L_S(h) = \frac{1}{m}\sum_{i=1}^m {\mathds{1}[h(x_i) \not= f(x_i)]}$
+\end{*equation}
+
+As seen from the figure ($2.2$), all the positive examples are inside the rectangle wherein negative examples are outside. Since the algorithm A returns the rectangle enclosing all the positive examples, the empirical risk should be minimized i.e, $L_S(h) = 0$ (which is the minimum possible training error.  
+Therefore, A is an ERM. \\
+
+\vspace{4pt}
+
+2) Let $R^* = R(a_1^*, b_1^*, a_2^*, b_2^*)$ be the rectangle that generates the labels (both positive and negative examples) and $R(S)$ is the rectangle returned by the algorithm A which contains the positive examples. That means, $R(S)\subseteq R^*)$. 
+
+Now, each of $R_i$ ($R_1, R_2, R_3, R_4$) rectangles has equal mass that is $\epsilon/4$. So, if we take the positive samples as $S = \cup_{i=1}^4 R_i$ considering all the positive samples from $R_1, R_2, R_3$ and $R_4$, then we have
+
+\begin{equation*}
+L_{(\mathcal{D},f)}(R(S)) = \mathcal{D}(R^* - R(S)) = \mathcal{D}(\cup_{i=1}^4R_i) \leq \sum_{i=1}^4{\epsilon/4  \le \epsilon}
+\end{equation*}
+
+Therefore, the hypothesis returned by A has error of at most $\epsilon$.
+
+Now for each $i \in {1, 2, 3, 4}$, let's assume $Q_i = {S|x: S|x \cap R_i = \emptyset}$ where S does not contain an example from $R_i$. As $Q_i$ does not have any positive examples of $R_i$, subtracting the total mass of all $R_i (R_1, R_2, R_3, R_4)$ from the total probability and with the upper bound of the probability that S not in $R_i$, we get    
+\begin{equation*}
+    \mathcal{D}^m(Q_i) = (1 - \epsilon/4)^m 
+    \leq e^{-\epsilon m/4}
+\end{equation*}
+
+Using the union bound for the true error over the probability distribution, we get 
+\begin{equation*}
+    \mathcal{D}^m(S|x: [L_{(\mathcal{D},f)}(R(S)) \ge \epsilon]}) = \mathcal{D}^m(\cup_{i=1}^4Q_i)
+    \leq \sum_{i=1}^4\mathcal{D}^m(Q_i)
+    \leq 4e^{-\epsilon m/4}
+\end{equation*}
+
+
+With probability or confidence or at least $1 - \delta$, from $4e^{-\epsilon m/4} \leq \delta$, we have 
+$m \ge \frac{4\log(4/\delta)}{\epsilon}$. Therefore, the training set for A is at least of size $\ge \frac{4\log(4/\delta)}{\epsilon}.
+
+\vspace{4pt}
+
+3)  If we repeat for the class of axis aligned rectangles in $\mathbb{R}^d$, that means we will have d-dimension. Previously, for dimension 2, we had 4 pointed rectangle. Now for the dimension as $d$, we will have $2\times d$ pointed structure. So, $m \ge \frac{2d \log(2d/\delta)}{\epsilon}$\\
+
+
+4)  For the d-dimensional examples, the Algorithm A is employed for determining the boundary of the structure of $2\times d$ points. In case of a rectangle, it is for 4-point coordinates. Then exploring all of the m examples, only the outermost points will be stored. Since every training example $x$ is $d$ dimensional in $\mathbb{R}$, total number of comparisons to find the outermost points will be $O(m\stars d) = \frac{2d^2\log(2d/\delta)}{\epsilon}$, which is a polynomial runtime for the algorithm A in $d$, $/\epsilon$, $\log(1/\delta)$.
+
+\item[3.] (3.1)\\
+For the PAC learnabile hypthothesis class $\mathcal{H}$, the true error probability (confidence) over the random samples $S$ is  
+$\mathcal{D}^m({S|x: [L_{(\mathcal{D}, f)}(h(S)) \gt \epsilon]}) \leq \delta$.
+
+Now, varying $\epsilon (\epsilon_1, \epsilon_2)$ while keeping $\delta$ constant, we have
+\begin{equation*}
+    \mathcal{D}^m({S|x: [L_{(\mathcal{D},f)}(h(S)) \gt \epsilon_1]}) \leq \delta 
+    \hspace{4pt} and \hspace{4pt}
+    \mathcal{D}^m({S|x: [L_{(\mathcal{D},f)}(h(S)) \gt \epsilon_2]}) \leq \delta
+\end{equation*}
+
+Since $0 \textless\epsilon_1\leq \epsilon_2 \textless 1$, the above two inequalities will hold with smaller number of training samples in case of the second one. Therefore, the number of training samples for $\epsilon_1$ will be larger than for $\epsilon_2$. Hence, $m_\mathcal{H}(\epsilon_1, \delta) \ge m_\mathcal{H}(\epsilon_2, \delta)$
+
+Analogously, with the constant $\epsilon$ and varying $\delta (\delta_1, \delta_2)$, we have
+\begin{equation*}
+    \mathcal{D}^m({S|x: [L_{(\mathcal{D},f)}(h(S)) \gt \epsilon]}) \leq \delta_1
+    \hspace{4pt} and \hspace{4pt}
+    \mathcal{D}^m({S|x: [L_{(\mathcal{D},f)}(h(S)) \gt \epsilon]}) \leq \delta_2
+\end{equation*}
+
+
+Since $0 \textless \delta_1\leq \delta_2 \textless 1$, the above two inequalities will hold with smaller number of training samples in case of the second one. Therefore, the number of training samples for $\delta_1$ will be larger than for $\delta_2$. 
+Hence, $m_\mathcal{H}(\epsilon, \delta_1) \ge m_\mathcal{H}(\epsilon, \delta_2)$
+
+
+\vspace{4pt}
+
+
+\item[4.] (3.2)\\
+1){\noindent} Based on the realizability assumption, there could be two scenarios: when all the training examples are negative and when all the training examples except one are negative. \\
+For the implementation of the ERM rule (training error is minimized), the algorithm will select the hypothesis $h^-$ when all the training examples are negative and the hypothesis $h_z$ when only one example is negative.
+
+\vspace{4pt}
+
+2) If the training set consists of just the negative examples, then the algorithm will return $h^-$ wherein $h_z$ should be returned. So, the cardinality of the bad hypothesis is $|\mathcal{H}_\mathcal{B}| \leq 1$. And the true error for the probability distribution $\mathcal{D}$ and true hypothesis $f$
+\begin{equation*}
+    \mathcal{D}^m({S|x: [L_{(\mathcal{D}, f)}(h(S)) \ge \epsilon]}) \\
+    = {(1 - \epsilon)}^m \leq e^{-\epsilon m}
+\end{equation*}
+
+And the sample complexity becomes $m \ge \frac{\log(1/\delta)}{\epsilon}$
+
+Since $e^{-\epsilon m} \leq \delta$ and with the above complexity, the hypothesis set $\mathcal{H}_{singleton}$ is PAC learnable.
+
+\newpage
+
+
+\item[5.] (3.3)\\
+At first, we assume that $R^*(R(S) \subseteq R^*)$ is the circle for which the training error will be the minimum and $R_1$ is a circle with probability mass $\epsilon$. For training sample $S = R_i$, we get the error for the probability distribution $\mathcal{D}$ and the true labels $f$
+$L_{(\mathcal{D}, f)}(R(S)) = \mathcal{D}(R^* - R(S))) = \mathcal{D}(R_1) = \epsilon$
+
+Suppose $Q = \{S|x: S|x \cap R_1 = \emptyset\}$ containing only the negative examples from $R_i$. Since $Q_i$ has no positive examples from $R_1$, so
+$\mathcal{D}^m(Q) = (1 - \epsilon)^m \leq e^{-\epsilon m}$
+
+The sample complexity we get for $e^{-\epsilon m} \leq \delta$ is  $m \ge \frac{\log(1/\delta)}{\epsilon}$
+
+Therefore, $\mathcal{H}$ is PAC learnable with $m_\mathcal{H}(\epsilon, \delta) \leq \ceil*{\frac{\log(1/\delta)}{\epsilon}}$$
+
+\vspace{4pt}
+
+
+\item[6.] (3.4)\\
+The hypothesis class of Boolean conjunctions over the instance space $\mathcal{X}$ includes instances where every instance can either be $x_i$ or $\bar{x_i}$. So, there will be in total of $2.d$ options. Then the cardinality of the hypothesis class will be $|\mathcal{H}| = \sum_{k=0}^{2.d}{2.d\choose k} = 2^{2.d}$. Therefore, the finite hypothesis class $\mathcal{H}$ is PAC learnable for  $m \ge \frac{\log(2^{2.d} / \delta)}{\epsilon}$.
+
+\vspace{4pt}
+
+Discarding the negative examples, in every positive example, for all the instances $(x_1,\dots x_n)$, if there exists only one type either 0 or 1, then the ERM rule will consider either that instance or it's negation i.e., $x_i$ or $\bar{x_i}$. As a result the runtime of the algorithm will be the multiple of the instance dimension and number of samples i.e., polynomial in $d\cdot m$. 
+
+
+\item[7.] (3.5)\\
+Using the union bound rule, for the true error over average of all the probability distributions $\bar{\matcal{D}}$ and true hypothesis $f$,
+\begin{equation*}
+\mathbb{P}(\exists h\in H: L_{(\bar{\mathcal{D}},f)}(h) \textgreater \epsilon \wedge L_{(S, f)}(h) = 0) =\cup_{h\in\mathcal{H_\mathcal{B}}}\bar{\mathcal{D}}^m(S|x: L{(\bar{\mathcal{D}}, f)}(h))
+\leq |\mathcal{H}|\bar{\mathcal{D}}^m(S|x: L_{(\bar{\mathcal{D}}, f)}(h))
+\end{equation*}
+
+Using the geometric-arithmetic mean inequality and with the probability over the sequence of distributions $(\mathcal{D}_1, \mathcal{D}_2, \dots \mathcal{D}_m)$, 
+\begin{equation*}
+L_{\bar{\mathcal{D}}, f}(h) = \frac{(\mathbb{P}_{x\sim \mathcal{D}_1}[h(x) \not= f(x)] + \dots + \mathbb{P}_{x\sim \mathcal{D}_n}[h(x)\not= f(x)])}{m}
+\le \frac{(1 - \epsilon) + \dots + (1 - \epsilon)}{m}
+= (1 - \epsilon)$$
+\end{equation*}
+
+Therefore, 
+\begin{equation*}
+\mathbb{P}(\exists h\in \mathcal{H}: L_{(\bar{\mathcal{D}}^m, f)}(h) \textgreater \epsilon \wedge L_{(S, f)}(h) = 0)
+\leq |\mathcal{H}| (1 - e)^m
+\leq |\mathcal{H}|e^{-\epsilon m}
+\end{equation*}
+
+
+\newpage
+
+\item[8.] (3.6) \\
+A finite hypothesis class $\mathcal{H}$ can be agnostically PAC learnable with sample complexity $m \ge \frac{\log(2|\mathcal{H}|/\delta}{2\epsilon^2}$. 
+Then $\mathcal{H}$ is PAC learnable with confidence $\delta/2$ and the error bound $\sqrt{2}\epsilon$. So, for $\mathcal{H}$ to be agnostically PAC learnable, there should exist a function $m_\mathcal{H}: (0, 1)\to \mathbb{N}$, with $(\epsilon, \delta)$, probability distribution $\mathcal{D}$ over $Z$. So, $
+\mathcal{D}^m\{S \in Z^m: L_{\mathcal{D}}(A(S)) \textgreater min_{h\in\mathcal{H}}L_{\mathcal{D}}(h) + \epsilon\}  \textless \delta$
+
+With the realizability assumption of
+$min_{h\in\mathcal{H}}L_{\mathcal{D}}(h) = 0$ and taking just over $\mathcal{X}$ instead of $Z$, we get 
+$\mathcal{D}^m\{S|x: L_{\mathcal{D}}(A(S)) \textgreater \epsilon\} \textless \delta$.
+Then this becomes PAC learnable too. Agnostic PAC learner algorithm $A$ returns $L_{\mathcal{D}}(A(S)) \leq min_{h\in\mathcal{H}}L_{\mathcal{D}}(h) + \epsilon$ with the realizability assumption of $min_{h\in\mathcal{H}}L_{\mathcal{D}}(h) = 0$. 
+
+As a result, it will return a PAC learnable error bound i.e., $L_{\mathcal{D}}(A(S)) \leq \epsilon$. 
+
+\vspace{4pt}
+
+\item[9.] (4.1)\\
+Given statements:\\
+1. For every $\epsilon, \delta \textgreater 0$, there exists $m(\epsilon, \delta)$ such that $\forall m\ge m(\epsilon, \delta)$
+$\mathbb{P}_{S\simD}[L_D(A(S)) \textgreater \epsilon] \textless \delta$$
+\\
+2.\hspace{5pt} $lim_{m\to\inf}\mathbb{E}_{S\simD^m}[L_D(A(S))] = 0$
+
+To prove that the above two statements are equivalent, we need to show that both sufficiency and necessary conditions hold. That means, for sufficiency, it will be sufficient to prove that if the first statement 
+is true, then the second statement is also true. And for necessity, it will be necessary to prove that the first statement is true when the second statement is true.
+
+Sufficiency proof:
+\begin{equation*}
+\mathbb{E}_{S\sim D^m}[L_D(A(S))]
+= D^m(S: L_D(A(S)) \leq \epsilon) \times L_D(A(S)) + D^m(S: L_D(A(S)) \textgreater \epsilon) \times L_D(A(S))
+\end{equation*}
+[Using the first given statement (if the statement 1. is true]
+$\textless (1\times\epsilon + \delta \times 1) 
+\textless \epsilon + \delta$
+
+
+If we take $\lambda = \epsilon + \delta$, from the above equation we have, $\mathbb{E}_{S\sim D^m}[L_D(A(S))] \textless \lambda$. So, choosing suitable $\delta$ and $\epsilon$ i.e., $m(\epsilon, \delta)$, we get $\mathbb{E}_{S\sim D^m}[L_D(A(S))] = 0$
+
+\vspace{4pt}
+
+Necessity proof:
+\begin{equation*}
+\mathbb{P}_{S\sim D^m}[L_D(A(S)) \textgreater\epsilon]
+\textless \frac{\mathbb{E}_{S\sim D^m}[L_D(A(S))]}{\epsilon}
+\textrm{\hspace{4pt} [Using the Markov's inequality]}
+\end{equation*}
+
+
+Now, from the sufficiency proof, $\mathbb{E}_{S\sim D^m} [L_D(A(S))]\epsilon \textless \lambda$. With $\lambda = \epsilon\delta$ and if the second given statement (statement 2) is true, then we get
+$$\mathbb{P}_{S\sim D^m}[L_D(A(S)) \textgreater \epsilon] \textless \frac{\epsilon\delta}{\epsilon} \textless \delta$$
+
+\newpage
+
+\item[10.] (4.2)
+Let the finite hypothesis class is $\mathcal{H}$ and the domain for input samples is $Z$.
+
+The loss function is l which transforms the samples over the domain $Z$ using the hypothesis class. That means, $l: \mathcal{H} \times Z \to [0, 1]$ . For the uniform convergence, it is known that $m_{\mathcal{H}}(\epsilon, \delta) \leq m_{\mathcal{H}}^{UC}(\epsilon/2, \delta)$.
+In order to prove the uniform convergence, it will be enough to show that
+$\mathcal{D}^m(\{S: \exists h \in \mathcal{H}|L_S(h) - L_D(h)| \textgreater \epsilon\} \textless \delta$
+
+Applying the union bound rule, we obtain
+$$\mathcal{D}^m({S: \exists h \in \mathcal{H}|L_S(h) - L_{\mathcal{D}}(h)| \textgreater \epsilon} \textless \delta = \mathcal{D}^m(\cup_{h\in\mathcal{H}}{S:\exists h\in \mathcal{H}|L_S(h) - L_{\mathcal{D}}(h)| \textgreater \epsilon}$$
+$$\leq \sum_{h\in\mathcal{H}}\mathcal{D}^m{(S: |L_S(h) - L_{\mathcal{D}}(h)| \textgreater \epsilon})$$
+
+Since each $z_i$ is sampled from $\mathcal{D}$, and
+\begin{equation*}
+L_{\mathcal{D}}(h) = \mu,
+L_S(h) = \frac{\sum_{i=1}^ml(h,Z_i)}{m} = \frac{\sum_{i=1}^m\theta_i}{m} \hspace{4pt}
+\textrm{where $L_{\mathcal{D}}(h)$ is the expected value of $L_S(h)$}. 
+\end{equation*}
+
+\\
+From the Hoeffding inequality:
+\begin{equation*}
+\mathcal{D}^m({S: |L_S(h) - L_{\mathcal{D}}(h)| \textgreater \epsilon} = \mathbb{P}[|\frac{1}{m}\sum_{i=1}^m\theta_i - \mu|] &= 2e^{(-2m\epsilon^2/(b-a)^2)}
+\end{equation*}
+So, 
+\begin{equation*}
+\mathcal{D}^m({S: \exists h\in \mathcal{H}|L_S(h) - L_{\mathcal{D}}(h)| \textgreater \epsilon}) \leq \sum_{h\in\mathcal{H}}\mathcal{D}^m({S: |L_S(h) - L_{\mathcal{D}}(h)| \textgreater \epsilon}
+= 2|\mathcal{H}|e^{(-2m\epsilon^2/(b - a)^2)}
+\end{equation*}
+
+
+From the above two equations,
+\begin{equation*}
+m \ge \frac{(b - a)^2\log(2|\mathcal{H}|/\delta)}{2\epsilon^2}
+\hspace{4pt}
+\textrm{and,}
+\hspace{4pt}
+m_\mathcal{H}^{UC}(\epsilon,\delta) \leq \ceil * {\frac{(b - a)^2\log(2|\mathcal{H}/\delta)}{2\epsilon^2}}
+\end{equation*}
+
+\begin{equation*}
+\textrm{Hence,}\hspace{8pt}
+m_\mathcal{H}(\epsilon, \delta) \leq m_\mathcal{H}^{UC}(\epsilon/2, \delta) \leq \ceil*{\frac{2(b - a)^2\log(2|\mathcal{H}/\delta)}{\epsilon^2}}
+\end{equation*}
+
+
+\subsection*{References}
+1. Online material. \href{https://www.cs.bgu.ac.il/~inabd171/wiki.files/lecture10_handouts.pdf}{[Lecture Note 1]} \\
+2. Online material.
+\href{https://www.cs.toronto.edu/~jlucas/teaching/csc411/lectures/lec23_24_handout.pdf}{[Lecture Note 2]}\\
+3. I discussed with Rizwan while working on the homework problems.
+
+\end{enumerate}
+	
+\end{document}
