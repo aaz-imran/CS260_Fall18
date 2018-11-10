@@ -1,0 +1,201 @@
+\documentclass[12pt,letterpaper]{article}
+
+\input{CS260.tex}%for different course, change the commented lines in this file
+\usepackage{graphicx,amssymb,amsmath,bm}
+\usepackage{newcommand}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{dsfont}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+\sloppy
+\newcommand{\ignore}[1]{}
+\usepackage{hyperref}
+
+\oddsidemargin 0in
+\evensidemargin 0in
+\textwidth 6.5in
+\topmargin -0.5in
+\textheight 9.0in
+
+\begin{document}
+
+\homework{Fall 2018}{$1$}{}{}
+\begin{footnotesize}
+	\begin{itemize}
+		\item Feel free to talk to other students in the class when doing the homework. You should, however, write down your solution yourself. You also must indicate on each homework with whom you collaborated and cite any other sources you use including
+		Internet sites.
+		\item You will write your solution in LaTeX and submit the pdf file through Gradescope. You also need to submit the zipped LaTeX files to CCLE.
+		We will grade your homework based on the final  version of the pdf file submitted to Gradescope. We will not grade the zipped Latex files on CCLE. However, failure to submitting your LaTax files to CCLE will incur 2 points penalty out of 100 points.	
+				\item The homework (both pdf and zipped Latex source files) is due at 3:59 PM before the class.
+	\end{itemize}
+\end{footnotesize}
+
+
+\begin{enumerate}
+	
+
+\item[1.] (5.1)\\
+Proof: We need to prove that $\mathbb{E}_{S \sim \mathcal{D}^m}[L_{\mathcal D}(A^*(S))] \ge \frac{1}{4}$ suffices for showing that $\mathbb{P}[L_D(A(S)) \ge \frac{1}{8}] \ge \frac{1}{7}$\\
+
+Let $\theta = L_D(A^*(S))$ be a random variable that represents the true error in the range $[0, 1]$ and whose expectation satisfies $\mathbb{E}[\theta] \ge \frac{1}{4}$.
+
+Using lemma B.1, we get\\
+\begin{equation*}
+    \mathbb{P}[\theta \textgreater a] \ge \frac{\mu - a}{1 -a}\\
+\end{equation*}
+
+Putting $\mu = \frac{1}{4}$ and $a =\frac{1}{8}$, we will have
+
+\begin{equation*}
+    \mathbb{P}[\theta \ge \frac{1}{8}] \ge \frac{\frac{1}{4} - \frac{1}{8}}{1 - \frac{1}{8}}
+    \ge \frac{\frac{1}{8}}{\frac{7}{8}} \ge \frac{1}{7}
+\end{equation*}
+
+Therefore, $\mathbb{P}[\theta \ge \frac{1}{8}] \ge \frac{1}{7} \square$
+
+
+\vspace{8pt}
+
+
+\item[2.] (6.1) \\
+Proof: We need to prove the monotonictity property of VC-dimension i.e.,For every two hypothesis classes if $\mathcal{H}' \subseteq \mathcal{H}$ then $VCdim(\mathcal{H}') \le VCdim(\mathcal{H})$.
+
+Let $H'\subseteq H$ and also let $VCdim(\mathcal{H}') = d, \hspace{4pt} d\in \mathbb{N}$. That means, for at least one set ${x_1, \dots, x_d}$ and for each $k \in \{0, 1\}^d, \hspace{4pt} \exist h \in \mathcal{H}'$ where $h(x_k) = s_i$ for $i = 1,\dots, k$.
+
+Now, if the set does not work for $\mathcal{H}'$, then we need to explore a richer hypothesis set i.e., $\mathcal{H}'$. 
+But since $H' \subseteq H, h \in H$. Therefore, a set in $\mathcal{H}'$ will also work for $\mathcal{H}$. That means, $\mathcal{H}$ will also shatter $\{x_1, \dots, d\}$. \\Thus $VCdim(\mathcal{H}') \le VCdim(\mathcal{H})$, which is what we required to prove. $\square$
+
+\vspace{4pt}
+
+
+\item[3.] (6.2) \\
+1. \hspace{4pt} For the given hypothesis set of all functions, we can consider the cases such as: $k \leq |\mathcal{X}|/2  \hspace{4pt}\text{and}\hspace{4pt} k \textgreater |\mathcal{X}|/2$ In the first case, for $C\subseteq\mathcal{X}$ as $k\leq |\mathcal{X}|/2, \hspace{4pt}\mathcal{H}_{=k}^{\mathcal{X}}$ cannot shatter C if its size is larger than k because $\mathcal{H}_{=k}^{\mathcal{X}}$ can identify at most 1 to k points. That means, it cannot identify all the positive examples in C. But C with size k can be shattered by $\mathcal{H}_{=k}^{\mathcal{X}}$. Therefore, the VC-dim = k. \\ For the second case, for $C\subseteq \mathcal{X}$ as $k \textgreater |\mathcal{X}|/2,\hspace{4pt}\mathcal{H}_{=k}^{\mathcal{X}}$ cannot shatter C $( |C| \textgreater |\mathcal{X}|/2 - k)$. Then $\mathcal{H}_{=k}^{\mathcal{X}}$ cannot identify the negative examples in C. But with $|C| = $|\mathcal{X} - k$ can be shattered by $\mathcal{H}_{=k}^{\mathcal{X}}$. Therefore,  $VC\text{-}dim = |\mathcal{X}| - k$. 
+
+\vspace{4pt}
+
+2. \hspace{4pt} For the given hypothesis set of all functions, we can consider the cases such as: $2k + 2 \textless |\mathcal{X}|$
+   and $2k + 2 \ge |\mathcal{X}|$. In the first case, for $C\subseteq\mathcal{X}$ as $k\leq |\mathcal{X}|, \hspace{4pt}\mathcal{H}_{at-most-k}$ cannot shatter C when $|C| \textgreater k$ since ${H}_{at-most-k}$ can identify at most 1 to k samples. That means, it cannot identify all the positive examples in C. But with $|C| = k$ can be shattered by ${H}_{at-most-k}$. Therefore, the VC-dim = k. \\ For the second case, for $C\subseteq \mathcal{X}$ as $k \textgreater |\mathcal{X}|,\hspace{4pt}{H}_{at-most-k}}$ cannot shatter C $(since |C| \textgreater |\mathcal{X}| - k)$. Then ${H}_{at-most-k}$ cannot identify the negative examples in C. But with $|C| = $ $\mathcal{X} - k$ can be shattered by ${H}_{at-most-k}$. Therefore,  $VC\text{-}dim = \mathcal{X} - k$. 
+
+
+\vspace{8pt}
+
+\item[4.] (6.3) \\
+We need to determine the VC-dimension of $\mathcal{H}_{n-parity} = \{h_I : I \subseteq \{1, \dots, n\}\}$.
+
+Here, in order to calculate the VC-dimension of $H_{n-parity}$, we need to compute the upper and lower bound matched for the shattering point of $\mathcal{H}_{n-parity}$. In the first case (for the upper bound), note that $\mathcal{H}_{n-parity}$ is a finite concept class with $2^n$ elements. Hence,  
+$$
+VC\text{-}dim(\mathcal{H}_{n-parity}) \leq \log_2|\mathcal{H}_{n-parity}| = \log_2^{2^n} = n.$$
+Therefore, $VC\text{-}dim(\mathcal{H}_{n-parity}) \leq n$.
+
+For the matching case, there exists a finite set of n-bit binary strings with size n that can be shattered by $\mathcal{H}_{n-parity}$. Let $\mathcal{H}_n = \{b_k : k \in [n]\}$ where each $b_k$ is a binary string with all 0s except the k-th bit. It can be shown that any subset $\mathcal{H}$ of $\mathcal{H}_n$ can be shattered by $\mathcal{H}_{n-parity}$ by setting $S = \{k : b_k \in \mathcal{H}\}$.
+
+Therefore, $VC\text{-}dim(\mathcal{H}_{n-parity}) = n$.
+
+\newpage
+
+\item[5] (6.4) \\
+Proof: 
+For every class $\mathcal{H}$ of finite VC-dimension d, and every subset A of the domain,
+
+$$|\mathcal{H}_A| \leq |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| \leq \sum_{i=0}^d {|A| \choose i}.$$
+
+Now, demonstrating the stricter cases for the two inequalities (four combinations):\\
+
+Case $|\mathcal{H}_A| \textless |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| \textless \sum_{i=0}^d {|A| \choose i}:$ Let $\mathcal{H}$ be the set of rectangles aligned by the axes and let $A = \{(0, 0), (0, 1), (1, 0), (1, 1)\}$. Here, A basically creates a square in $\mathbb{R}^2$. Similarly, we can draw a rectangle around 0 points, 1 point, 2 points (considering they are not diagonal from each other) and 4 points. However, it is not possible to draw rectangles around 3 of the points. Thus $|\mathcal{H}| = 10.$ Any strict subset of size less than or equal to these 2 points can be shattered. Thus $|\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| = 11$ (counting the empty set too). 
+Thus, $\sum_{i=0}^d {|A|\choose i} = 1 + 4 + 6 + 4 + 1 = 16$. Therefore,  $|\mathcal{H}_A| \textless |\{B \subseteq A : \mathcal{H} \text{shatters}\hspace{4pt} B\}| \textless \sum_{i=0}^d {|A| \choose i}$. \\
+
+Case $|\mathcal{H}_A| \textless |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| = \sum_{i=0}^d {|A| \choose i}:$ Let $\mathcal{H} = {[u, 1] \times \mathbb{R} : u\in[0,1]}$ and $A = \{(1/2, 1), (1/2, 0)\}$. 
+Then $|\mathcal{H}_A| = 2$ since $\mathcal{H}_A = \{(0, 0), (1, 1)\}$. So, $|B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B| = 3$ because any strict subset of A is shattered, but not the set A. Moreover, $\sum_{i=0}^d {|A|\choose i} = \sum_{i=0}^1{2\choose i} = 1 + 2 = 3$.
+Therefore, $|\mathcal{H}_A| \textless |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| = \sum_{i=0}^d {|A| \choose i}$. \\
+
+Case $|\mathcal{H}_A| = |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| \textless \sum_{i=0}^d {|A| \choose i}:$ Let $A = {(1, 0)}$ and also let $\mathcal{H} = \mathds{1}_{x_1\textless a\hspace{4pt}\text{and}\hspace{4pt} x_2 = 1} | \hspace{4pt}a\in\mathbb{R} \hspace{4pt}\text{and} \hspace{4pt} (x_1, x_2)\in\mathbb{R}^2$. Then we get $\mathcal{H}_A = 0$ and $\mathcal{H}_A = 1$. The subsets of A are ${\emptyset, A}$ and only $\emptyset$ is shattered by $\mathcal{H}$. Hence, $|B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B| = 1$. If we have $d \ge 1, \sum_{i=0}^d {|A| \choose i} = 1 + 1 = 2$. Let, C = {(1, 1)}. Since $\mathds{1}_{1<0 \hspace{4pt}\text{and}\hspace{4pt} 1=1} = 0$ and $\mathds{1}_{1<2\hspace{4pt} \text{and}\hspace{4pt} 1=1} = 1$, so $VC\text{-}dim(\mathcal{H}) \ge 1$. Therefore, $|\mathcal{H}_A| = |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| \textless \sum_{i=0}^d {|A| \choose i}$. \\
+
+
+$|\mathcal{H}_A| = |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| = \sum_{i=0}^d {|A| \choose i}$: Let $\mathcal{H}$ is a hypothesis class that shatters a set A. So, $|\mathcal{H}_A| = 2^{|A|}$. Since A is shattered by $\mathcal{H}$, all the subsets of A are shattered by $\mathcal{H}$ as well. Hence, $|B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B| = 2^{|A|}$. Moreover, $\sum_{i =0}^n {n \choose i}= 2^n$. Since $\mathcal{H}$ \text{shatters} A, so $|A| \leq d$. Therefore, $|\mathcal{H}_A| = |\{B \subseteq A : \mathcal{H}\hspace{4pt} \text{shatters}\hspace{4pt} B\}| \textless \sum_{i=0}^d {|A| \choose i}$.$\square$  
+
+
+\vspace{8pt}
+\newpage
+
+\item[6] (6.7) \\
+If a finite hypothesis class $\mathcal{H}$ shatters a finite set C then $|\mathcal{H}| \ge |\mathcal{H}_C| = 2^{|C|}$. 
+This implies that $VC(\mathcal{H}) \leq \floor{\log_2(|\mathcal{H}|)}$.
+
+
+1. We can consider threshold functions that can take thresholds in
+${1, \dots, k}$. In this case, $\mathcal{H} = k$ but it can shatter at most 1 element. Therefore, $VC\text{-}dim(\mathcal{H}) = 1$.
+
+\vspace{4pt}
+2. $\mathcal{H} = \{t, t^*\}$ where $t^+(x) = 1, t = sign(x - \gamma)}$ and $\gamma$ can be any fractional values. 
+Therefore, the cardinality of $\mathcal{H}$ is $|\mathcal{H}| = 2$. However, it can shatter $|C| \leq 1$.\\ Hence the $VC\text{-}dim(\mathcal{H}) = 1 = \floor{\log_2 2^1} = \floor{\log_2(|\mathcal{H}|)}$.  
+
+\vspace{8pt}
+
+
+
+\item[7] (11.1)\\
+Proof: Since the label is chosen at random following the Bernoulli distribution, $P[y=1] = P[y=0] = 1/2$.
+Choosing $\epsilon = 1/2$, it can be said that the true error for the training set will be $L_\mathcal{D} = 1/2$
+
+Now, for the parity of the labels on the training set, the constant predictor hypothesis
+\begin{gather*}
+h(x) =    
+\begin{cases}
+  1,        \textrm{if the number of examples labeled as 1 is odd}\\    
+  0, otherwise 
+\end{cases}
+\end{gather*}
+
+With leave-one-out cross validation, if we consider the following labels for a training set $S$,
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{c c c c c c c c c}
+    Example: & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+    Label: & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 1 
+    
+\end{tabular}
+\end{table}
+
+If we perform cross validation with 4-folds, leaving one fold each time, the training hypothesis will always predict wrong. That means when the training hypothesis prediction is 0, the validation hypothesis prediction will be 1 and vice-versa. As a result, the leave-one-out estimate becomes 0.
+
+Therefore, the difference between the leave-one-out estimate and the true error is always 1/2. $\square$
+
+\newpage
+
+\item[8] (11.2) \\
+For the cross-validation, the number of training examples ($m$) is expected to be greater than the VC-dimension ($d$). In general, cross-validation is only useful for such cases if the training examples can be shuffled randomly in order to pick a validation set. When the number of parameters in the hypothesis class is too large, that could be an ideal scenario for the cross-validation technique. For example, $\mathcal{H}$ is a finite hypothesis class which is PAC learnable. Based on the ERM, the error can be bounded by $\epsilon$ with probability $\delta$.  If we perform cross-validation, we will be dealing with two varities of $\epsilon$. For the training error  
+$\epsilon_1 \leq \frac{1}{m}log(|\mathcal{H}|/\delta)$. On the otherhand, for the cross validation computed on the validation set,  we get $\epsilon_2 \leq \frac{1}{\alpha m}log(|\mathcal{H}'|/\delta)$ [where $\mathcal{H}'$] is the validation hypothesis]. For the regularization, $\epsilon_1$ and $\epsilon_2$, the training error becomes $\delta^{1 - \alpha}|\mathcal{H}^\alpha| / |\mathcal{H}'|$ times the validation error. Therefore, the minimum of $\epsilon_1$ and $\epsilon_2$ can be selected. Therefore, if $\alpha$ is too large, the cross validation returns the minimum error bound i.e., $\epsilon_2$. That means, when we have large number of training examples $(m \textgreater d)$, cross-validation performs really good.
+
+\vspace{8pt}
+
+
+\item[9] (7.1)\\
+For any finite class of hypothesis $\mathcal{H}$ and any description language d, we get $VC\text{-}dim(d) = \floor{\log_2(|\mathcal{H}|)}$. 
+If $|\mathcal{H}| = \sum_{i=0}^n(2^i) = 2^{n+1} - 1$,
+$d \leq \floor{\log_2(|\mathcal{H}|)} \leq (n+1) \leq 2n$.
+
+Further, for a prefix-free description, taking each of the hypotheses of size t, a number of functions $t' \ge 2n$ can be selected. In order to get the maximum possible separating point for the hypothesis class $\mathcal{H}$, the prefix-free description deeper than the maximum depth $n$ i.e., the VC-dimension is bounded to the supremum depth for the description language. $\square$
+
+
+\item[10] (7.2) \\
+We need to show that for an infinite countable hypothesis class $\mathcal{H} = \{h_n : n \in \mathbb{N}\}$ for binary classification, it is impossible to assign weights to the hypotheses in $\mathcal{H}$.
+
+If the weights are monotonically non-increasing, i.e., for $i \textless j$, the weigths $w(h_i) \leq w(h_j)$. When the weights are positive i.e., $w(h_i) \ge 0$ and $i \ge 1$, $\sum_{h\in\mathcal{H}} w(h) \sim \inf$. That means the weights tend to be infinity. Therefore, $\mathcal{H}$ is not nonuniformly learnable ($i.e., \sum_{h\in \mathcal{H}} w(h) \nleq 1$). Hence, it becomes impossible to assign weights to the hypotheses in $\mathcal{H}$. $\square$
+
+
+
+
+\subsection*{References}
+1. Online material. \href{http://www.cs.uu.nl/docs/vakken/mbd/slides/VC-Examples.pdf}{[VC-dimension examples]} \\
+2. I discussed with Rizwan while working on the homework problems.
+
+
+
+
+\end{enumerate}
+	
+\end{document}
